@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Trash Fighter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(180deg, #e8f5e9, #ffffff);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            /* Evita rolagem horizontal indesejada */
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            /* Mantém o header fixo no topo */
+            top: 0;
+            z-index: 100;
+            /* Garante que o header fique acima do conteúdo */
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            /* Transição mais suave e adiciona efeito de escala */
+        }
+
+        .menu a:hover {
+            background-color: #368b3a;
+            transform: scale(1.05);
+            /* Efeito de escala ao passar o mouse */
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .download-btn {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            text-decoration: none;
+            background-color: #368b3a;
+            /* Cor padrão do botão */
+        }
+
+        .download-btn:hover {
+            background-color: #4CAF50;
+            transform: scale(1.05);
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            background: white;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            /* Centraliza os elementos */
+            gap: 20px;
+            /* Adiciona espaçamento entre os elementos */
+        }
+
+        .text {
+            flex: 1 1 45%;
+            padding: 20px;
+            min-width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* Sutil sombra para os textos */
+            border-radius: 8px;
+            /* Bordas arredondadas */
+            background-color: #f9f9f9;
+            /* Leve fundo cinza claro */
+        }
+
+        .text h1,
+        .text h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .text h1 {
+            font-size: 2.5rem;
+        }
+
+        .text h2 {
+            font-size: 1.8rem;
+        }
+
+        .text p {
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 1.2rem;
+            text-align: justify;
+            /* Justifica o texto */
+        }
+
+        .image {
+            flex: 1 1 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            max-width: 500px;
+            /* Define uma largura máxima para as imagens */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            padding: 10px;
+        }
+
+        .image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            display: block;
+        }
+
+        .image-left {
+            margin: 10px auto;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            margin-top: auto;
+            /* Empurra o footer para o final da página */
+        }
+
+        .menu-toggle {
+            display: none;
+            /* Oculta por padrão em telas maiores */
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                /* Ajuste conforme a altura do seu header */
+                left: 0;
+                width: 100%;
+                background-color: #4CAF50;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                border-top: 1px solid #368b3a;
+            }
+
+            .menu.active {
+                display: flex;
+            }
+
+            .menu a {
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #368b3a;
+                display: block;
+            }
+
+            .menu a:last-child {
+                border-bottom: none;
+            }
+
+            .menu-toggle {
+                display: block;
+                cursor: pointer;
+                font-size: 1.5rem;
+                color: white;
+                padding: 10px;
+                /* Adicione padding para melhor toque */
+            }
+
+            .text,
+            .image {
+                flex: 1 1 90%;
+                min-width: unset;
+            }
+
+            .text h1 {
+                font-size: 2rem;
+            }
+
+            .text h2 {
+                font-size: 1.5rem;
+            }
+
+            .text p {
+                font-size: 1rem;
+            }
+
+            .image {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="menu" id="mainMenu">
+            <a href="index.html">Projeto</a>
+            <a href="tecsus.html">Tecnologia Sustentável</a>
+            <a href="grupo.html">Grupo</a>
+        </div>
+        <div class="actions">
+            <a href="https://drive.google.com/drive/folders/1dj1O-aBk0JHYuH-QOTcG2nQnOC1YRjQW?usp=sharing"
+                class="download-btn">Download</a>
+        </div>
+    </header>
+    <main>
+        <div class="text">
+            <h1>Quem somos?</h1>
+            <p>Somos estudantes do Campus Timóteo do CEFET-MG (Centro Federal de Educação Tecnológica de Minas Gerais) e
+                nos unimos com o propósito de desenvolver o projeto Tecnologias Sustentáveis, uma iniciativa que visa
+                criar soluções inovadoras e educativas para abordar questões ambientais relevantes. Nosso principal
+                objetivo é contribuir para a conscientização da sociedade sobre práticas sustentáveis, com foco especial
+                no público infantil, utilizando a tecnologia como ferramenta de transformação social.
+            </p>
+            <h2>A Equipe</h2>
+            <p>O projeto é conduzido por um grupo de estudantes dedicados e motivados, que juntos aplicam seus
+                conhecimentos e habilidades em diferentes áreas para criar um impacto positivo no meio ambiente. Os
+                integrantes do grupo são:</p>
+
+            <p>-Arthur Oliveira Ribeiro</p>
+            <p>-Caio Breder Carvalho</p>
+            <p>Felipe Jéstison Pereira do Nascimento</p>
+            <p>-Gabriel Dutra Marques
+            <p>-Pedro Nicolini Jorge Magalhães</p>
+            <p>Nosso trabalho é orientado pelo professor Leonel Muniz, cuja experiência e orientação têm sido
+                fundamentais para o desenvolvimento do projeto. Ele nos guia na superação dos desafios técnicos e nos
+                incentiva a explorar soluções criativas e eficazes, alinhadas aos Objetivos de Desenvolvimento
+                Sustentável (ODS).</p>
+        </div>
+    </main>
+    <footer>
+        &copy; 2025 Turtle Trash Fighter. Todos os direitos reservados.
+    </footer>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>
